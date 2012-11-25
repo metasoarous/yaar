@@ -6,47 +6,42 @@
 
 #include "DriveMotor.h"
 
-int pinI1=8; //define I1 interface
-int pinI2=11; //define I2 interface
-int speedPin=9; //enable motor A
-
-/*int pinI1=12; //define I3 interface*/
-/*int pinI2=13; //define I4 interface*/
-/*int speedPin=10; //enable motor B*/
-
-/*int spead =127; //define the spead of motor*/
+// Drive Motor Pins
+int pinI1=8;
+int pinI2=11;
+int speedPin=9;
 
 int servoControlPin = 53;
 
-Servo turner;  // create servo object to control a servo
-                // a maximum of eight servo objects can be created
+// Initialize servo and drive motor
+Servo turner;
 DriveMotor driver;
 
-int pos = 0;    // variable to store the servo position
 
+// + is left, - is right
+void turn(int degrees) {
+  turner.write(90 - degrees);
+}
+
+
+// Cue arduino madness
 
 void setup() {
   driver.connect(pinI1, pinI2, speedPin);
   turner.attach(53);  // attaches the servo on pin 9 to the servo object
 }
 
-void turn(int degrees) {
-  turner.write(degrees - 90);
-}
-
-
 void loop() {
+  turn(0);
+  delay(1000);
   driver.forward(100);
   delay(1000);
+  turn(45);
+  delay(1000);
+  turn(-45);
   driver.stop();
   driver.forward(100);
   delay(1000);
   driver.stop();
-
-  for(pos = 180; pos>=1; pos-=1)     // goes from 180 degrees to 0 degrees
-  {
-    turner.write(pos);              // tell servo to go to position in variable 'pos'
-    delay(15);                       // waits 15ms for the servo to reach the position
-  }
 }
 
